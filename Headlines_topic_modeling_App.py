@@ -158,8 +158,8 @@ def headline_finder(input_query, bow, word2vec, glove, custom_word2vec, lsa, n):
     all_similar_headlines = pd.DataFrame()
 
     if bow == True:
-        bow_model = pickle.load(open('bag_of_words_count_vectorizer.pickle', 'rb'))
-        bow_processed_headlines = pickle.load(open('deployment/embeddings_df/bow_processed_headlines.pickle', 'rb'))
+        bow_model = pickle.load(open('embedding_models/bag_of_words_count_vectorizer.pickle', 'rb'))
+        bow_processed_headlines = pickle.load(open('embeddings_df/bow_processed_headlines.pickle', 'rb'))
         bow_emb_array = bow_model.transform(bow_processed_headlines.edited_headline).toarray()
         similar_headlines_bow = find_top_n_headlines_bow(bow_processed_headlines, bow_emb_array, input_query, bow_model,
                                                          n)
@@ -167,36 +167,36 @@ def headline_finder(input_query, bow, word2vec, glove, custom_word2vec, lsa, n):
         total_models.append(similar_headlines_bow)
 
     if word2vec == True:
-        W2V_model = KeyedVectors.load('Word2Vec_model.bin')
-        W2V_df = pickle.load(open('pretrained_Word2Vec_embeddings_df.pickle', 'rb'))
-        W2V_clustering_model = pickle.load(open('pretrained_Word2Vec_clustering_model.pickle', 'rb'))
+        W2V_model = KeyedVectors.load('embedding_models/Word2Vec_model.bin')
+        W2V_df = pickle.load(open('embeddings_df/pretrained_Word2Vec_embeddings_df.pickle', 'rb'))
+        W2V_clustering_model = pickle.load(open('clustering_models/pretrained_Word2Vec_clustering_model.pickle', 'rb'))
         similar_headlines_W2V = find_top_n_headlines_W2V_Glove(W2V_df, input_query, W2V_model, W2V_clustering_model, n)
         models.append('Pretrained-Word2Vec')
         total_models.append(similar_headlines_W2V)
 
     if glove == True:
-        glove_model = KeyedVectors.load('glove_model.bin')
-        glove_df = pickle.load(open('pretrained_GloVe_embeddings_df.pickle', 'rb'))
-        glove_clustering_model = pickle.load(open('pretrained_GloVe_clustering_model.pickle', 'rb'))
+        glove_model = KeyedVectors.load('embedding_models/glove_model.bin')
+        glove_df = pickle.load(open('embeddings_df/pretrained_GloVe_embeddings_df.pickle', 'rb'))
+        glove_clustering_model = pickle.load(open('clustering_models/pretrained_GloVe_clustering_model.pickle', 'rb'))
         similar_headlines_glove = find_top_n_headlines_W2V_Glove(glove_df, input_query, glove_model,
                                                                  glove_clustering_model, n)
         models.append('Pretrained-GloVe')
         total_models.append(similar_headlines_glove)
 
     if custom_word2vec == True:
-        custom_word2vec_model = KeyedVectors.load('Word2VecCustomTrained_model.bin')
-        custom_W2V_df = pickle.load(open('custom_Word2Vec_embeddings_df.pickle', 'rb'))
-        custom_W2V_clustering_model = pickle.load(open('custom_Word2Vec_clustering_model.pickle', 'rb'))
+        custom_word2vec_model = KeyedVectors.load('embedding_models/Word2VecCustomTrained_model.bin')
+        custom_W2V_df = pickle.load(open('embeddings_df/custom_Word2Vec_embeddings_df.pickle', 'rb'))
+        custom_W2V_clustering_model = pickle.load(open('clustering_models/custom_Word2Vec_clustering_model.pickle', 'rb'))
         similar_headlines_custom_W2V = find_top_n_headlines_W2V_Glove(custom_W2V_df, input_query, custom_word2vec_model,
                                                                       custom_W2V_clustering_model, n)
         models.append('Custom-Word2Vec')
         total_models.append(similar_headlines_custom_W2V)
 
     if lsa == True:
-        lsa_tfidf_vect_model = pickle.load(open('tfidf_vect_LSA_model.pickle', 'rb'))
-        lsa_svd_model = pickle.load(open('svd_LSA_model.pickle', 'rb'))
-        lsa_df = pickle.load(open('LSA_embeddings_df.pickle', 'rb'))
-        lsa_clustering_model = pickle.load(open('LSA_clustering_model.pickle', 'rb'))
+        lsa_tfidf_vect_model = pickle.load(open('embedding_models/tfidf_vect_LSA_model.pickle', 'rb'))
+        lsa_svd_model = pickle.load(open('embedding_models/svd_LSA_model.pickle', 'rb'))
+        lsa_df = pickle.load(open('embeddings_df/LSA_embeddings_df.pickle', 'rb'))
+        lsa_clustering_model = pickle.load(open('clustering_models/LSA_clustering_model.pickle', 'rb'))
         similar_headlines_lsa = find_top_n_headlines_LSA(lsa_df, input_query, lsa_tfidf_vect_model, lsa_svd_model,
                                                          lsa_clustering_model, n)
         models.append('LSA')
